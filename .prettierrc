@@ -21,6 +21,12 @@
       "options": {
         "parser": "typescript"
       }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "parser": "scss"
+      }
     }
   ]
 }

@@ -1,0 +1,81 @@
+.uk-form-label {
+  color: #f8f8f2;
+}
+.uk-input {
+  background-color: #282a36;
+  color: #f8f8f2;
+  border-color: #6272a4;
+}
+.uk-input:focus {
+  border-color: #ff79c6;
+}
+.uk-button-primary {
+  background-color: #ff79c6;
+  color: #f8f8f2;
+  border-color: #ff79c6;
+}
+.uk-button-primary:hover {
+  background-color: #ff5570;
+  border-color: #ff5570;
+}
+
+.uk-form-controls {
+  background: #282a36;
+  color: #f8f8f2;
+  border-color: #6272a4;
+}
+
+.uk-select {
+  background: #282a36;
+  color: #f8f8f2;
+  border-color: #6272a4;
+}
+
+.uk-select option {
+  background: #282a36;
+  color: #f8f8f2;
+}
+
+.uk-select option:hover {
+  background: #44475a;
+  color: #f8f8f2;
+}
+
+.uk-select option:selected {
+  background: #6272a4;
+  color: #f8f8f2;
+}
+
+.uk-input[disabled] {
+  background-color: #44475a;
+  border-color: #44475a;
+  color: #6272a4;
+}
+
+.uk-select[disabled] {
+  background: #44475a;
+  border-color: #44475a;
+  color: #6272a4;
+}
+
+.uk-form-controls[disabled] {
+  background: #44475a;
+  border-color: #44475a;
+  color: #6272a4;
+}
+
+.uk-button-primary[disabled] {
+  background: #44475a;
+  border-color: #44475a;
+  color: #6272a4;
+}
+
+.uk-input[readonly] {
+  background-color: #44475a;
+  border-color: #44475a;
+  color: #6272a4;
+}
+
+input[required='required']:not(.required) {
+  border: 2px solid red;
+}
