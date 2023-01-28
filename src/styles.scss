@@ -1,8 +1,10 @@
+@import 'theme';
+
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #282a36;
-  color: #f8f8f2;
+  background-color: $dracula-background;
+  color: $dracula-foreground;
 }

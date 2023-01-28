@@ -1,81 +1,119 @@
+@import '../../theme';
+
+.uk-container {
+  width: 50vw;
+}
 .uk-form-label {
-  color: #f8f8f2;
+  color: $dracula-foreground;
 }
 .uk-input {
-  background-color: #282a36;
-  color: #f8f8f2;
-  border-color: #6272a4;
+  background-color: $dracula-background;
+  color: $dracula-foreground;
+  border-color: $dracula-comment;
 }
 .uk-input:focus {
-  border-color: #ff79c6;
+  border-color: $dracula-pink;
 }
 .uk-button-primary {
-  background-color: #ff79c6;
-  color: #f8f8f2;
-  border-color: #ff79c6;
-}
-.uk-button-primary:hover {
-  background-color: #ff5570;
-  border-color: #ff5570;
+  background-color: $dracula-pink;
+  color: $dracula-foreground;
+  border-color: $dracula-pink;
 }
 
 .uk-form-controls {
-  background: #282a36;
-  color: #f8f8f2;
-  border-color: #6272a4;
+  background: $dracula-background;
+  color: $dracula-foreground;
+  border-color: $dracula-comment;
 }
 
 .uk-select {
-  background: #282a36;
-  color: #f8f8f2;
-  border-color: #6272a4;
+  background: $dracula-background;
+  color: $dracula-foreground;
+  border-color: $dracula-comment;
+}
+
+.uk-select:focus {
+  border-color: $dracula-pink;
 }
 
 .uk-select option {
-  background: #282a36;
-  color: #f8f8f2;
-}
-
-.uk-select option:hover {
-  background: #44475a;
-  color: #f8f8f2;
+  background: $dracula-background;
+  color: $dracula-foreground;
 }
 
 .uk-select option:selected {
-  background: #6272a4;
-  color: #f8f8f2;
+  background: $dracula-comment;
+  color: $dracula-foreground;
 }
 
 .uk-input[disabled] {
-  background-color: #44475a;
-  border-color: #44475a;
-  color: #6272a4;
+  background-color: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
 }
 
 .uk-select[disabled] {
-  background: #44475a;
-  border-color: #44475a;
-  color: #6272a4;
+  background: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
 }
 
 .uk-form-controls[disabled] {
-  background: #44475a;
-  border-color: #44475a;
-  color: #6272a4;
+  background: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
 }
 
 .uk-button-primary[disabled] {
-  background: #44475a;
-  border-color: #44475a;
-  color: #6272a4;
+  background: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
 }
 
 .uk-input[readonly] {
-  background-color: #44475a;
-  border-color: #44475a;
-  color: #6272a4;
+  background-color: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
 }
 
-input[required='required']:not(.required) {
+.uk-input[readonly] {
+  background-color: $dracula-current;
+  border-color: $dracula-current;
+  color: $dracula-comment;
+}
+
+.uk-input.ng-invalid {
   border: 2px solid red;
+}
+
+.uk-alert-primary {
+  background-color: $dracula-purple;
+  color: $dracula-current;
+  a.uk-alert-close {
+    color: $dracula-current;
+  }
+}
+
+.uk-alert-success {
+  background-color: $dracula-green;
+  color: $dracula-current;
+  a.uk-alert-close {
+    color: $dracula-current;
+  }
+}
+
+.uk-alert-warning {
+  background-color: $dracula-yellow;
+  color: $dracula-current;
+  a.uk-alert-close {
+    color: $dracula-current;
+  }
+}
+
+.uk-alert-danger {
+  background-color: $dracula-red;
+  color: $dracula-current;
+  a.uk-alert-close {
+    color: $dracula-current;
+  }
 }

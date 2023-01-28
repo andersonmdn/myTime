@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-activity-form',
@@ -8,7 +8,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class ActivityFormComponent implements OnInit {
   form: FormGroup;
-  timeDifference: string;
+  timerId: any;
+
   activityOptions = [
     {
       description: 'Afastamento Doença',
@@ -492,8 +493,8 @@ export class ActivityFormComponent implements OnInit {
     },
     {
       description: 'SAI - Retornos',
-      activityNumberEnable: 1,
-      activityItemEnable: 0,
+      activityNumberEnable: 2,
+      activityItemEnable: 1,
       activityDescriptionEnabled: 0,
       myTime: 0,
       estimatedTimeEnable: false,
@@ -629,90 +630,153 @@ export class ActivityFormComponent implements OnInit {
   ];
 
   constructor() {
-    this.form = new FormGroup({
-      activity: new FormControl(''),
-      activityNumber: new FormControl(''),
-      estimatedTime: new FormControl(''),
-      startTime: new FormControl(''),
-      endTime: new FormControl(''),
-      timeDifference: new FormControl(''),
-    });
+    this.form = new FormGroup({});
 
-    this.timeDifference = '';
+    this.timerId = 0;
   }
 
   ngOnInit() {
     this.form = new FormGroup({
-      activity: new FormControl(''),
+      activity: new FormControl('SAI - Auxílio'),
       activityNumber: new FormControl(''),
       activityItem: new FormControl(''),
       estimatedTime: new FormControl(''),
-      startTime: new FormControl(''),
-      endTime: new FormControl(''),
+      startTime: new FormControl('', [Validators.required, this.validationTimeStartEnd("start")]),
+      endTime: new FormControl(
+        new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }),
+        [Validators.required, this.validationTimeStartEnd("end")],
+      ),
+      currentActivity: new FormControl(false),
       timeDifference: new FormControl(''),
+      timeLeft: new FormControl(''),
     });
 
-    this.timeDifference = '';
+    this.updateValidators('SAI - Auxílio');
 
     this.form.get('activity')?.valueChanges.subscribe((activity: string) => {
-      let desiredOption = this.activityOptions.find((option) => option.description === activity);
+      this.updateValidators(activity);
+    });
 
-      if (desiredOption) {
-        if (desiredOption.activityNumberEnable > 0) {
-          if ((desiredOption.activityNumberEnable = 2)) {
-            this.form.get('activityNumber')?.setValidators(Validators.required);
-          }
-          this.form.get('activityNumber')?.enable();
-        } else {
-          this.form.get('activityNumber')?.clearValidators();
-          this.form.get('activityNumber')?.disable();
-        }
+    this.timerId = setInterval(() => {
+      if (this.form.value.currentActivity) {
+        const currentTime = new Date();
+        this.form
+          .get('endTime')
+          ?.setValue(currentTime.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }));
+        this.calculateTimeDiff();
+        this.calculateTimeLeft();
+      }
+    }, 9000);
+  }
 
-        if (desiredOption.activityItemEnable > 0) {
-          if ((desiredOption.activityItemEnable = 2)) {
-            this.form.get('activityItem')?.setValidators(Validators.required);
-          }
-          this.form.get('activityItem')?.enable();
-        } else {
-          this.form.get('activityItem')?.clearValidators();
-          this.form.get('activityItem')?.disable();
-        }
+  ngOnDestroy() {
+    clearInterval(this.timerId);
+  }
 
-        if (desiredOption.estimatedTimeEnable) {
-          this.form.get('estimatedTime')?.setValidators(Validators.required);
-          this.form.get('estimatedTime')?.enable();
-        } else {
-          this.form.get('estimatedTime')?.clearValidators();
-          this.form.get('estimatedTime')?.disable();
+  updateValidators(activity: string) {
+    let desiredOption = this.activityOptions.find((option) => option.description === activity);
+
+    if (desiredOption) {
+      if (desiredOption.activityNumberEnable > 0) {
+        if ((desiredOption.activityNumberEnable = 2)) {
+          this.form.get('activityNumber')?.setValidators(Validators.required);
         }
+        this.form.get('activityNumber')?.enable();
       } else {
         this.form.get('activityNumber')?.clearValidators();
         this.form.get('activityNumber')?.disable();
+      }
+
+      if (desiredOption.activityItemEnable > 0) {
+        if ((desiredOption.activityItemEnable = 2)) {
+          this.form.get('activityItem')?.setValidators(Validators.required);
+        }
+        this.form.get('activityItem')?.enable();
+      } else {
         this.form.get('activityItem')?.clearValidators();
         this.form.get('activityItem')?.disable();
+      }
+
+      if (desiredOption.estimatedTimeEnable) {
+        this.form.get('estimatedTime')?.setValidators(Validators.required);
+        this.form.get('estimatedTime')?.enable();
+      } else {
         this.form.get('estimatedTime')?.clearValidators();
         this.form.get('estimatedTime')?.disable();
       }
+    } else {
+      this.form.get('activityNumber')?.clearValidators();
+      this.form.get('activityNumber')?.disable();
+      this.form.get('activityItem')?.clearValidators();
+      this.form.get('activityItem')?.disable();
+      this.form.get('estimatedTime')?.clearValidators();
+      this.form.get('estimatedTime')?.disable();
+    }
 
-      this.form.get('activityNumber')?.updateValueAndValidity();
-      this.form.get('activityItem')?.updateValueAndValidity();
-      this.form.get('estimatedTime')?.updateValueAndValidity();
-    });
+    this.form.get('activityNumber')?.updateValueAndValidity();
+    this.form.get('activityItem')?.updateValueAndValidity();
+    this.form.get('estimatedTime')?.updateValueAndValidity();
   }
 
   calculateTimeDiff() {
-    if (this.form.value.startTime && this.form.value.endTime) {
+    if (this.form.value.startTime && this.form.getRawValue().endTime) {
       let start = new Date('1970-01-01 ' + this.form.value.startTime);
-      let end = new Date('1970-01-01 ' + this.form.value.endTime);
+      let end = new Date('1970-01-01 ' + this.form.getRawValue().endTime);
       let diff = end.getTime() - start.getTime();
       let minutes = diff / (1000 * 60);
-      this.timeDifference = minutes + ' minutes';
+      this.form.get('timeDifference')?.setValue(minutes + 'min');
+
+      this.form.get('startTime')?.updateValueAndValidity()
+      this.form.get('endTime')?.updateValueAndValidity()
+    }
+  }
+
+  calculateTimeLeft() {
+    if (this.form.value.estimatedTime && this.form.getRawValue().timeDifference) {
+      let minutesLeft = this.form.value.estimatedTime - this.form.getRawValue().timeDifference.replace(/\D/g, '');
+      this.form.get('timeLeft')?.setValue(minutesLeft + 'min');
+    }
+  }
+
+  changeCurrentActivity() {
+    if (this.form.get('currentActivity')?.value) {
+      this.form.get('endTime')?.disable();
+      const currentTime = new Date();
+      this.form
+        .get('endTime')
+        ?.setValue(currentTime.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }));
+      this.calculateTimeDiff();
+      this.calculateTimeLeft();
+    } else {
+      this.form.get('endTime')?.enable();
+    }
+  }
+
+  validationTimeStartEnd(time: string): ValidatorFn{
+    return (control: AbstractControl): ValidationErrors | null => {
+      let startTime = new Date('1970-01-01 ' + control.value);
+      let endTime = new Date('1970-01-01 ' + control.value);
+
+      if (time == 'start') {
+        endTime = new Date('1970-01-01 ' + this.form.getRawValue().endTime);
+      } else {
+        startTime = new Date('1970-01-01 ' + this.form.getRawValue().startTime);
+      }
+
+      if (endTime < startTime) {
+        return { validationTimeStartEnd: true };
+      }
+
+      return null;
     }
   }
 
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      const formValues = this.form.getRawValue();
+
+      if (formValues.startTime <= formValues.endTime) {
+      }
     }
   }
 }
