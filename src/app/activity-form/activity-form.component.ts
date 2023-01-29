@@ -21,7 +21,6 @@ interface iActivity {
   templateUrl: './activity-form.component.html',
   styleUrls: ['./activity-form.component.scss'],
 })
-
 export class ActivityFormComponent implements OnInit {
   form: FormGroup;
   timerId: any;
@@ -659,17 +658,17 @@ export class ActivityFormComponent implements OnInit {
       activityItem: new FormControl(''),
       estimatedTime: new FormControl(''),
       activityDate: new FormControl(moment().format('YYYY-MM-DD')),
-      startTime: new FormControl('', [Validators.required, this.validationTimeStartEnd("start")]),
+      startTime: new FormControl('', [Validators.required, this.validationTimeStartEnd('start')]),
       endTime: new FormControl(
         new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }),
-        [Validators.required, this.validationTimeStartEnd("end")],
+        [Validators.required, this.validationTimeStartEnd('end')],
       ),
       currentActivity: new FormControl(false),
       timeDifference: new FormControl(''),
       timeLeft: new FormControl(''),
     });
 
-    console.log(moment().format('YYYY/MM/DD'))
+    console.log(moment().format('YYYY/MM/DD'));
 
     this.updateValidators('SAI - Auxílio');
 
@@ -746,8 +745,8 @@ export class ActivityFormComponent implements OnInit {
       let minutes = diff / (1000 * 60);
       this.form.get('timeDifference')?.setValue(minutes + 'min');
 
-      this.form.get('startTime')?.updateValueAndValidity()
-      this.form.get('endTime')?.updateValueAndValidity()
+      this.form.get('startTime')?.updateValueAndValidity();
+      this.form.get('endTime')?.updateValueAndValidity();
     }
   }
 
@@ -772,7 +771,7 @@ export class ActivityFormComponent implements OnInit {
     }
   }
 
-  validationTimeStartEnd(time: string): ValidatorFn{
+  validationTimeStartEnd(time: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       let startTime = new Date('1970-01-01 ' + control.value);
       let endTime = new Date('1970-01-01 ' + control.value);
@@ -788,12 +787,12 @@ export class ActivityFormComponent implements OnInit {
       }
 
       return null;
-    }
+    };
   }
 
   onSubmit() {
     if (this.form.valid) {
-      this.activityArray.push(this.form.value)
+      this.activityArray.push(this.form.value);
       localStorage.setItem('activities', JSON.stringify(this.activityArray));
     }
   }
