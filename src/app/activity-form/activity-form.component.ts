@@ -1,14 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
+import * as moment from 'moment';
+
+interface iActivity {
+  activity: string | null;
+  activityNumber: number | null;
+  activityItem: number | null;
+  estimatedTime: string | null;
+  activityDate: string | null;
+  startTime: string | null;
+  endTime: string | null;
+  currentActivity: boolean | null;
+  timeDifference: string | null;
+  timeLeft: string | null;
+}
+
 @Component({
   selector: 'app-activity-form',
   templateUrl: './activity-form.component.html',
   styleUrls: ['./activity-form.component.scss'],
 })
+
 export class ActivityFormComponent implements OnInit {
   form: FormGroup;
   timerId: any;
+  activityArray: iActivity[] = JSON.parse(localStorage.getItem('activities') || '[]');
 
   activityOptions = [
     {
@@ -641,6 +658,7 @@ export class ActivityFormComponent implements OnInit {
       activityNumber: new FormControl(''),
       activityItem: new FormControl(''),
       estimatedTime: new FormControl(''),
+      activityDate: new FormControl(moment().format('YYYY-MM-DD')),
       startTime: new FormControl('', [Validators.required, this.validationTimeStartEnd("start")]),
       endTime: new FormControl(
         new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }),
@@ -650,6 +668,8 @@ export class ActivityFormComponent implements OnInit {
       timeDifference: new FormControl(''),
       timeLeft: new FormControl(''),
     });
+
+    console.log(moment().format('YYYY/MM/DD'))
 
     this.updateValidators('SAI - Auxílio');
 
@@ -773,10 +793,8 @@ export class ActivityFormComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      const formValues = this.form.getRawValue();
-
-      if (formValues.startTime <= formValues.endTime) {
-      }
+      this.activityArray.push(this.form.value)
+      localStorage.setItem('activities', JSON.stringify(this.activityArray));
     }
   }
 }
