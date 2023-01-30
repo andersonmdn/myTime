@@ -660,7 +660,7 @@ export class ActivityFormComponent implements OnInit {
       activityDate: new FormControl(moment().format('YYYY-MM-DD')),
       startTime: new FormControl('', [Validators.required, this.validationTimeStartEnd('start')]),
       endTime: new FormControl(
-        new Date().toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }),
+        moment().format('HH:mm'),
         [Validators.required, this.validationTimeStartEnd('end')],
       ),
       currentActivity: new FormControl(false),
@@ -668,7 +668,7 @@ export class ActivityFormComponent implements OnInit {
       timeLeft: new FormControl(''),
     });
 
-    console.log(moment().format('YYYY/MM/DD'));
+    console.log(moment().format('HH:mm'));
 
     this.updateValidators('SAI - Auxílio');
 
@@ -678,10 +678,7 @@ export class ActivityFormComponent implements OnInit {
 
     this.timerId = setInterval(() => {
       if (this.form.value.currentActivity) {
-        const currentTime = new Date();
-        this.form
-          .get('endTime')
-          ?.setValue(currentTime.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }));
+        this.form.get('endTime')?.setValue(moment().format('HH:mm'));
         this.calculateTimeDiff();
         this.calculateTimeLeft();
       }
@@ -760,10 +757,9 @@ export class ActivityFormComponent implements OnInit {
   changeCurrentActivity() {
     if (this.form.get('currentActivity')?.value) {
       this.form.get('endTime')?.disable();
-      const currentTime = new Date();
       this.form
         .get('endTime')
-        ?.setValue(currentTime.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' }));
+        ?.setValue(moment().format("HH:mm"));
       this.calculateTimeDiff();
       this.calculateTimeLeft();
     } else {
