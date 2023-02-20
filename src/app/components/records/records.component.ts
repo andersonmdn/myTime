@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 
 import * as moment from 'moment';
+import { RecordsService } from 'src/app/services/record.service';
 
 interface iActivity {
   activity: string | null;
@@ -18,33 +18,20 @@ interface iActivity {
 }
 
 @Component({
-  selector: 'app-activity-form',
-  templateUrl: './activity-form.component.html',
-  styleUrls: ['./activity-form.component.scss'],
+  selector: 'app-records',
+  templateUrl: './records.component.html',
+  styleUrls: ['./records.component.scss'],
 })
-export class ActivityFormComponent implements OnInit {
+export class RecordsComponent implements OnInit {
   form: FormGroup;
   timerId: any;
   activityArray: iActivity[] = JSON.parse(localStorage.getItem('activities') || '[]');
 
   activityOptions: any[];
 
-  constructor(private http: HttpClient) {
+  constructor(private records: RecordsService) {
     this.activityOptions = [];
 
-    // this.http.get('http://localhost:3000/activities').subscribe((data: any) => {
-    //   this.activityOptions = data.map((activity: any) => ({
-    //     escription: activity.description,
-    //     activityNumberEnable: activity.activity_number,
-    //     activityItemEnable: activity.activity_item,
-    //     activityDescriptionEnabled: activity.activity_description,
-    //     myTime: activity.my_time,
-    //     estimatedTimeEnable: activity.estimated_time == 1,
-    //   }))
-    //   console.log(this.activityOptions)
-    // });
-
-    console.log(this.activityOptions)
     this.form = new FormGroup({});
 
     this.timerId = 0;
@@ -54,11 +41,11 @@ export class ActivityFormComponent implements OnInit {
     this.http.get('http://localhost:3000/activities').subscribe((data: any) => {
       this.activityOptions = data.map((activity: any) => ({
         description: activity.description,
-        activityNumberEnable: activity.activity_number,
-        activityItemEnable: activity.activity_item,
-        activityDescriptionEnabled: activity.activity_description,
-        myTime: activity.my_time,
-        estimatedTimeEnable: activity.estimated_time == 1,
+        activityNumberEnable: activity.has_number,
+        activityItemEnable: activity.has_item,
+        activityDescriptionEnabled: activity.has_description,
+        myTime: 0,
+        estimatedTimeEnable: activity.has_estimated_time == 1,
       }))
       console.log(this.activityOptions)
     });
@@ -199,8 +186,9 @@ export class ActivityFormComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.activityArray.push(this.form.value);
-      localStorage.setItem('activities', JSON.stringify(this.activityArray));
+      // this.activityArray.push(this.form.value);
+      // localStorage.setItem('activities', JSON.stringify(this.activityArray));
+
     }
   }
 }

@@ -1,19 +1,23 @@
-@import '../../theme';
+@import '../../../theme';
 
 .uk-container {
   width: 75vw;
 }
+
 .uk-form-label {
   color: $dracula-foreground;
 }
+
 .uk-input {
   background-color: $dracula-background;
   color: $dracula-foreground;
   border-color: $dracula-comment;
 }
+
 .uk-input:focus {
   border-color: $dracula-pink;
 }
+
 .uk-button-primary {
   background-color: $dracula-pink;
   color: $dracula-foreground;
@@ -89,6 +93,7 @@
 .uk-alert-primary {
   background-color: $dracula-purple;
   color: $dracula-current;
+
   a.uk-alert-close {
     color: $dracula-current;
   }
@@ -97,6 +102,7 @@
 .uk-alert-success {
   background-color: $dracula-green;
   color: $dracula-current;
+
   a.uk-alert-close {
     color: $dracula-current;
   }
@@ -105,6 +111,7 @@
 .uk-alert-warning {
   background-color: $dracula-yellow;
   color: $dracula-current;
+
   a.uk-alert-close {
     color: $dracula-current;
   }
@@ -113,6 +120,7 @@
 .uk-alert-danger {
   background-color: $dracula-red;
   color: $dracula-current;
+
   a.uk-alert-close {
     color: $dracula-current;
   }
